@@ -53,6 +53,8 @@ class NewVisitorTest(LiveServerTestCase):
         # and now the page lists "1: Buy peacock feathers" as an item in a
         # to-do list table
         inputbox.send_keys(Keys.ENTER)
+        import time
+        time.sleep(5)
         edith_list_url = self.browser.current_url
         self.assertRegex(edith_list_url, '/lists/.+')
         self.check_for_row_in_list_table('1: Buy peacock feathers')
@@ -72,7 +74,10 @@ class NewVisitorTest(LiveServerTestCase):
         ## We use a new browser session to make sure that no information
         ## of Edith's is coming through from cookies etc 
         self.browser.quit()
-        self.browser.Firefox()
+        # Define location of firefox binary for geckodriver
+        binary = FirefoxBinary(r'/usr/local/bin/firefox')
+        # Pass location of firefox binary to the webdriver
+        self.browser = webdriver.Firefox(firefox_binary=binary)
 
         # Francis visits the home page. There is no sign of Edith's list
         self.browser.get(self.live_server_url)
@@ -85,6 +90,7 @@ class NewVisitorTest(LiveServerTestCase):
         inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('Buy milk')
         inputbox.send_keys(Keys.ENTER)
+        time.sleep(5)
 
         # Francis get his own unique URL
         francis_list_url = self.browser.current_url
