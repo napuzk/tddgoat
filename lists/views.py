@@ -11,3 +11,12 @@ def home_page(request):
 def view_list(request):
     items = Item.objects.all()
     return render(request, 'list.html', {'items': items})
+
+def new_list(request):
+    for key in request.POST.keys():
+        print("KEY")
+        print(key)
+        print(request.POST[key])
+    Item.objects.create(text=request.POST['item_text'])
+    print(Item.objects.count())
+    return redirect('/lists/the-only-list-in-the-world/')
